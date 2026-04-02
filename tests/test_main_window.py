@@ -33,7 +33,7 @@ def test_main_window_loads_tools(tmp_path) -> None:
 
     # Then: 侧边栏与工作区数量一致，且至少有 1 个工具
     assert sidebar_count == workspace_count
-    assert sidebar_count >= 5
+    assert sidebar_count >= 6
 
     window.close()
     app.quit()

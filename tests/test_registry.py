@@ -41,11 +41,12 @@ def test_build_registry_contains_sample_tool() -> None:
     tools = list(registry.all())
     tool_ids = [tool.metadata.tool_id for tool in tools]
 
-    # Then: 默认包含示例、Token、JSON 工具
-    assert len(tools) == 3
+    # Then: 默认包含示例、Token、JSON、Diff 工具
+    assert len(tools) == 4
     assert "sample_tool" in tool_ids
     assert "token_counter" in tool_ids
     assert "json_tool" in tool_ids
+    assert "diff_tool" in tool_ids
 
 
 def test_build_registry_contains_sft_tool_when_repo_provided(tmp_path) -> None:
@@ -62,6 +63,7 @@ def test_build_registry_contains_sft_tool_when_repo_provided(tmp_path) -> None:
     assert "sample_tool" in tool_ids
     assert "token_counter" in tool_ids
     assert "json_tool" in tool_ids
+    assert "diff_tool" in tool_ids
     assert "sft_params" in tool_ids
 
 
@@ -79,4 +81,5 @@ def test_build_registry_contains_prompt_tool_when_repo_provided(tmp_path) -> Non
     assert "sample_tool" in tool_ids
     assert "token_counter" in tool_ids
     assert "json_tool" in tool_ids
+    assert "diff_tool" in tool_ids
     assert "prompt_manager" in tool_ids

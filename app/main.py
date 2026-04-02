@@ -15,6 +15,7 @@ from app.storage import (
     PromptRepository,
     SftParamTemplateRepository,
 )
+from app.tools.diff_tool import DiffTool
 from app.tools.json_tool import JsonTool
 from app.tools.prompt_manager import PromptManagerTool
 from app.tools.registry import ToolRegistry
@@ -35,6 +36,7 @@ def build_registry(
     registry.register(SampleTool())
     registry.register(TokenCounterTool())
     registry.register(JsonTool())
+    registry.register(DiffTool())
     if sft_param_repo is not None:
         registry.register(SftParamTool(sft_param_repo))
     if prompt_repo is not None:
