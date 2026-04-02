@@ -12,6 +12,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from app.storage import ConfigRepository, UiState
 from app.tools.base import ToolPlugin
 from app.tools.registry import ToolRegistry
 
@@ -19,13 +20,18 @@ from app.tools.registry import ToolRegistry
 class MainWindow(QMainWindow):
     """应用主窗口：左侧工具列表，右侧工作区。"""
 
-    def __init__(self, registry: ToolRegistry) -> None:
+    def __init__(
+        self,
+        registry: ToolRegistry,
+        config_repo: ConfigRepository,
+    ) -> None:
         super().__init__()
         self._registry = registry
+        self._config_repo = config_repo
         self._tool_order: list[ToolPlugin] = []
 
         self.setWindowTitle("SFT 工具集")
-        self.resize(1200, 760)
+        self._load_ui_state()
 
         self.sidebar = QListWidget(self)
         self.sidebar.setMinimumWidth(240)
@@ -42,8 +48,25 @@ class MainWindow(QMainWindow):
 
         self._load_tools()
         self.sidebar.currentRowChanged.connect(self._switch_tool)
-        if self.sidebar.count() > 0:
-            self.sidebar.setCurrentRow(0)
+        self._select_initial_tool()
+
+    def _load_ui_state(self) -> None:
+        """加载窗口状态配置。"""
+        state = self._config_repo.load_ui_state()
+        self.resize(state.window_width, state.window_height)
+        self._initial_tool_id = state.last_tool_id
+
+    def _select_initial_tool(self) -> None:
+        """根据配置选择初始工具。"""
+        if self.sidebar.count() == 0:
+            return
+
+        if self._initial_tool_id:
+            for index, tool in enumerate(self._tool_order):
+                if tool.metadata.tool_id == self._initial_tool_id:
+                    self.sidebar.setCurrentRow(index)
+                    return
+        self.sidebar.setCurrentRow(0)
 
     def _load_tools(self) -> None:
         """从注册中心加载工具到 UI。"""
@@ -71,3 +94,18 @@ class MainWindow(QMainWindow):
                 self.sidebar.setCurrentRow(0)
             return
         super().keyPressEvent(event)
+
+    def closeEvent(self, event) -> None:  # noqa: N802
+        """关闭时持久化 UI 配置。"""
+        current_index = self.sidebar.currentRow()
+        last_tool_id = ""
+        if 0 <= current_index < len(self._tool_order):
+            last_tool_id = self._tool_order[current_index].metadata.tool_id
+
+        state = UiState(
+            window_width=self.width(),
+            window_height=self.height(),
+            last_tool_id=last_tool_id,
+        )
+        self._config_repo.save_ui_state(state)
+        super().closeEvent(event)
