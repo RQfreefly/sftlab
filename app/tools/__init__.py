@@ -1,8 +1,17 @@
 """工具模块导出。"""
 
 from app.tools.base import ToolPlugin
+from app.tools.json_tool import JsonTool
 from app.tools.prompt_manager import PromptManagerTool
 from app.tools.registry import ToolRegistry
 from app.tools.sft_params import SftParamTool
+from app.tools.token_counter import TokenCounterTool
 
-__all__ = ["ToolPlugin", "ToolRegistry", "SftParamTool", "PromptManagerTool"]
+__all__ = [
+    "ToolPlugin",
+    "ToolRegistry",
+    "SftParamTool",
+    "PromptManagerTool",
+    "TokenCounterTool",
+    "JsonTool",
+]

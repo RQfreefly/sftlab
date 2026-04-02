@@ -33,7 +33,7 @@ def test_main_window_loads_tools(tmp_path) -> None:
 
     # Then: 侧边栏与工作区数量一致，且至少有 1 个工具
     assert sidebar_count == workspace_count
-    assert sidebar_count >= 3
+    assert sidebar_count >= 5
 
     window.close()
     app.quit()
@@ -53,7 +53,12 @@ def test_main_window_persists_ui_state_on_close(tmp_path) -> None:
         build_registry(sft_param_repo=sft_repo, prompt_repo=prompt_repo),
         config_repo=config_repo,
     )
-    window.sidebar.setCurrentRow(1)
+    tool_ids = [
+        window.workspace.widget(index).property("tool_id")
+        for index in range(window.workspace.count())
+    ]
+    sft_index = tool_ids.index("sft_params")
+    window.sidebar.setCurrentRow(sft_index)
     window.resize(1400, 880)
     window.close()
 

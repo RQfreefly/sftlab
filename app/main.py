@@ -15,10 +15,12 @@ from app.storage import (
     PromptRepository,
     SftParamTemplateRepository,
 )
+from app.tools.json_tool import JsonTool
 from app.tools.prompt_manager import PromptManagerTool
 from app.tools.registry import ToolRegistry
 from app.tools.sample_tool import SampleTool
 from app.tools.sft_params import SftParamTool
+from app.tools.token_counter import TokenCounterTool
 from app.ui.main_window import MainWindow
 
 LOGGER = get_logger(__name__)
@@ -31,6 +33,8 @@ def build_registry(
     """构建默认工具注册表。"""
     registry = ToolRegistry()
     registry.register(SampleTool())
+    registry.register(TokenCounterTool())
+    registry.register(JsonTool())
     if sft_param_repo is not None:
         registry.register(SftParamTool(sft_param_repo))
     if prompt_repo is not None:
