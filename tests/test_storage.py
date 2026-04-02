@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest
 
 from app.storage import ConfigRepository, Database, UiState
-from app.storage.migrations import LATEST_SCHEMA_VERSION
+from app.storage.migrations import LATEST_SCHEMA_VERSION, migrate_to_v1
 
 
 def test_database_initialize_runs_migrations(tmp_path) -> None:
@@ -32,6 +32,7 @@ def test_database_initialize_runs_migrations(tmp_path) -> None:
         }
         assert "app_config" in table_names
         assert "sft_param_templates" in table_names
+        assert "sft_param_template_versions" in table_names
         assert "prompt_directories" in table_names
 
 
@@ -65,6 +66,35 @@ def test_database_future_schema_version_should_raise(tmp_path) -> None:
     # When / Then: 初始化时应报错，避免降级覆盖
     with pytest.raises(RuntimeError):
         database.initialize()
+
+
+def test_database_upgrade_from_v1_should_backfill_template_versions(tmp_path) -> None:
+    # Given: 一个停留在 v1 的数据库，且已有参数模板数据
+    database = Database(tmp_path / "sftlab.db")
+    with database.connect() as conn:
+        conn.execute("CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT NOT NULL)")
+        migrate_to_v1(conn)
+        conn.execute(
+            """
+            INSERT INTO sft_param_templates(name, cli_text)
+            VALUES('legacy-template', 'swift sft --model /ssd/legacy')
+            """
+        )
+        conn.execute(
+            "INSERT INTO meta(key, value) VALUES('schema_version', '1') "
+            "ON CONFLICT(key) DO UPDATE SET value='1'"
+        )
+
+    # When: 调用 initialize 执行升级迁移
+    database.initialize()
+
+    # Then: 旧模板应自动补一条版本记录
+    with database.connect() as conn:
+        row = conn.execute(
+            "SELECT COUNT(*) AS cnt FROM sft_param_template_versions WHERE template_id = 1"
+        ).fetchone()
+        assert row is not None
+        assert int(row["cnt"]) == 1
 
 
 def test_config_repository_can_save_and_load_ui_state(tmp_path) -> None:

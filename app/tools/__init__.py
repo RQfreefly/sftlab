@@ -2,5 +2,6 @@
 
 from app.tools.base import ToolPlugin
 from app.tools.registry import ToolRegistry
+from app.tools.sft_params import SftParamTool
 
-__all__ = ["ToolPlugin", "ToolRegistry"]
+__all__ = ["ToolPlugin", "ToolRegistry", "SftParamTool"]

@@ -5,8 +5,9 @@ from __future__ import annotations
 import pytest
 
 from app.main import build_registry
-from app.tools.registry import ToolRegistry
+from app.storage import Database, SftParamTemplateRepository
 from app.tools.sample_tool import SampleTool
+from app.tools.registry import ToolRegistry
 
 
 def test_register_and_get_tool() -> None:
@@ -42,3 +43,18 @@ def test_build_registry_contains_sample_tool() -> None:
     # Then: 默认包含一个示例工具
     assert len(tools) == 1
     assert tools[0].metadata.tool_id == "sample_tool"
+
+
+def test_build_registry_contains_sft_tool_when_repo_provided(tmp_path) -> None:
+    # Given: 可用的参数模板仓储
+    database = Database(tmp_path / "sftlab.db")
+    database.initialize()
+    repo = SftParamTemplateRepository(database)
+
+    # When: 使用仓储构建注册表
+    registry = build_registry(sft_param_repo=repo)
+    tool_ids = [tool.metadata.tool_id for tool in registry.all()]
+
+    # Then: 包含参数管理工具
+    assert "sample_tool" in tool_ids
+    assert "sft_params" in tool_ids
