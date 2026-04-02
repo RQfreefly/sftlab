@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest
 
 from app.main import build_registry
-from app.storage import Database, PromptRepository, SftParamTemplateRepository, TimerRepository
+from app.storage import ConfigRepository, Database, PromptRepository, SftParamTemplateRepository, TimerRepository
 from app.tools.sample_tool import SampleTool
 from app.tools.registry import ToolRegistry
 
@@ -100,3 +100,17 @@ def test_build_registry_contains_timer_tool_when_repo_provided(tmp_path) -> None
 
     # Then: 包含计时工具
     assert "segment_timer" in tool_ids
+
+
+def test_build_registry_contains_llm_tool_when_config_repo_provided(tmp_path) -> None:
+    # Given: 可用配置仓储
+    database = Database(tmp_path / "sftlab.db")
+    database.initialize()
+    repo = ConfigRepository(database)
+
+    # When: 使用配置仓储构建注册表
+    registry = build_registry(config_repo=repo)
+    tool_ids = [tool.metadata.tool_id for tool in registry.all()]
+
+    # Then: 包含 LLM API 测试工具
+    assert "llm_api_tester" in tool_ids

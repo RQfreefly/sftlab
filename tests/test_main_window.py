@@ -31,6 +31,7 @@ def test_main_window_loads_tools(tmp_path) -> None:
     timer_repo = TimerRepository(database)
     window = MainWindow(
         build_registry(
+            config_repo=config_repo,
             sft_param_repo=sft_repo,
             prompt_repo=prompt_repo,
             timer_repo=timer_repo,
@@ -44,7 +45,7 @@ def test_main_window_loads_tools(tmp_path) -> None:
 
     # Then: 侧边栏与工作区数量一致，且至少有 1 个工具
     assert sidebar_count == workspace_count
-    assert sidebar_count >= 8
+    assert sidebar_count >= 9
 
     window.close()
     app.quit()
@@ -63,6 +64,7 @@ def test_main_window_persists_ui_state_on_close(tmp_path) -> None:
     # When: 调整窗口尺寸并关闭
     window = MainWindow(
         build_registry(
+            config_repo=config_repo,
             sft_param_repo=sft_repo,
             prompt_repo=prompt_repo,
             timer_repo=timer_repo,

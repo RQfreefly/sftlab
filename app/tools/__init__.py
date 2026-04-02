@@ -4,6 +4,7 @@ from app.tools.base import ToolPlugin
 from app.tools.cli_calculator import CliCalculatorTool
 from app.tools.diff_tool import DiffTool
 from app.tools.json_tool import JsonTool
+from app.tools.llm_api_tester import LlmApiTesterTool
 from app.tools.prompt_manager import PromptManagerTool
 from app.tools.registry import ToolRegistry
 from app.tools.segment_timer import SegmentTimerTool
@@ -20,4 +21,5 @@ __all__ = [
     "DiffTool",
     "CliCalculatorTool",
     "SegmentTimerTool",
+    "LlmApiTesterTool",
 ]

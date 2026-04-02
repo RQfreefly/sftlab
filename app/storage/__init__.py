@@ -1,6 +1,6 @@
 """存储层导出。"""
 
-from app.storage.config_repository import ConfigRepository, UiState
+from app.storage.config_repository import ConfigRepository, LlmApiSettings, UiState
 from app.storage.database import Database
 from app.storage.prompt_repository import (
     PromptDirectory,
@@ -19,6 +19,7 @@ __all__ = [
     "Database",
     "ConfigRepository",
     "UiState",
+    "LlmApiSettings",
     "PromptDirectory",
     "PromptTemplate",
     "PromptVersion",

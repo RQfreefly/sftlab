@@ -19,6 +19,7 @@ from app.storage import (
 from app.tools.cli_calculator import CliCalculatorTool
 from app.tools.diff_tool import DiffTool
 from app.tools.json_tool import JsonTool
+from app.tools.llm_api_tester import LlmApiTesterTool
 from app.tools.prompt_manager import PromptManagerTool
 from app.tools.registry import ToolRegistry
 from app.tools.sample_tool import SampleTool
@@ -31,6 +32,7 @@ LOGGER = get_logger(__name__)
 
 
 def build_registry(
+    config_repo: ConfigRepository | None = None,
     sft_param_repo: SftParamTemplateRepository | None = None,
     prompt_repo: PromptRepository | None = None,
     timer_repo: TimerRepository | None = None,
@@ -42,6 +44,8 @@ def build_registry(
     registry.register(JsonTool())
     registry.register(DiffTool())
     registry.register(CliCalculatorTool())
+    if config_repo is not None:
+        registry.register(LlmApiTesterTool(config_repo))
     if timer_repo is not None:
         registry.register(SegmentTimerTool(timer_repo))
     if sft_param_repo is not None:
@@ -66,6 +70,7 @@ def run() -> int:
     app = QApplication(sys.argv)
     window = MainWindow(
         build_registry(
+            config_repo=config_repo,
             sft_param_repo=sft_param_repo,
             prompt_repo=prompt_repo,
             timer_repo=timer_repo,

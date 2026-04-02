@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from app.storage import ConfigRepository, Database, UiState
+from app.storage import ConfigRepository, Database, LlmApiSettings, UiState
 from app.storage.migrations import LATEST_SCHEMA_VERSION, migrate_to_v1
 
 
@@ -123,3 +123,31 @@ def test_config_repository_get_returns_default(tmp_path) -> None:
 
     # Then: 返回默认值
     assert value == "fallback"
+
+
+def test_config_repository_can_save_and_load_llm_api_settings(tmp_path) -> None:
+    # Given: 已初始化数据库与配置仓储
+    database = Database(tmp_path / "sftlab.db")
+    database.initialize()
+    repo = ConfigRepository(database)
+
+    expected = LlmApiSettings(
+        base_url="https://api.example.com",
+        api_key="sk-test",
+        model="deepseek-v3.2",
+        temperature="0.2",
+        top_p="0.8",
+        max_tokens="4096",
+        presence_penalty="0.1",
+        frequency_penalty="0.1",
+        enable_thinking=False,
+        stream=False,
+        system_prompt="You are a helpful assistant.",
+    )
+
+    # When: 保存并读取 LLM 参数
+    repo.save_llm_api_settings(expected)
+    loaded = repo.load_llm_api_settings()
+
+    # Then: 参数可正确持久化
+    assert loaded == expected
