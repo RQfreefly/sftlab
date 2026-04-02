@@ -8,7 +8,7 @@
 - `tests/`：自动化测试目录。
 
 ## 构建、测试与开发命令
-当前未提供统一构建脚本，建议使用本地 Python 虚拟环境开发。
+当前未提供统一构建脚本，使用本地 Python 虚拟环境开发。
 
 - `python3 -m venv .venv && source .venv/bin/activate`：创建并激活虚拟环境。
 - `pip install -U pip`：升级 `pip`。
@@ -32,7 +32,7 @@
 - 测试文件放在 `tests/`。
 - 文件命名：`test_<module>.py`。
 - 用例命名：`test_<behavior>`。
-- 至少覆盖主流程与关键边界（空行、缺列、非法标签等）。
+- 至少覆盖主流程与关键边界（空行、缺列、非法标签等），保证测试覆盖率大于 70%。
 
 ## 提交与合并请求规范
 提交信息沿用仓库已有 Conventional Commits 风格：

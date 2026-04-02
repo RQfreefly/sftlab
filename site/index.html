@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SFTLab 介绍页，支持中英文切换。">
+    <title data-i18n="page_title">SFTLab | SFT/LLM 本地工具集</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="hero-glow hero-glow-a" aria-hidden="true"></div>
+    <div class="hero-glow hero-glow-b" aria-hidden="true"></div>
+
+    <header class="site-header container">
+        <a href="#" class="brand" aria-label="SFTLab Home">
+            <span class="brand-dot"></span>
+            <span>SFTLab</span>
+        </a>
+        <nav class="nav-links" aria-label="Main Navigation">
+            <a href="#features" data-i18n="nav_features">功能</a>
+            <a href="#workflow" data-i18n="nav_workflow">流程</a>
+            <a href="#about" data-i18n="nav_about">关于</a>
+        </nav>
+        <button id="langToggle" class="lang-toggle" type="button" aria-label="切换语言">EN</button>
+    </header>
+
+    <main>
+        <section class="hero container">
+            <div class="hero-copy reveal">
+                <p class="hero-badge" data-i18n="hero_badge">SFT Desktop Toolkit</p>
+                <h1 class="hero-title" data-i18n="hero_title">聚焦 SFT/LLM 高频任务的本地工具集</h1>
+                <p class="hero-desc" data-i18n="hero_desc">
+                    基于 Python + PySide6，集中管理参数模板、Prompt、Token 统计、JSON/Diff 处理与 API 测试，减少多工具切换成本。
+                </p>
+                <div class="hero-actions">
+                    <a class="btn btn-primary" href="#features" data-i18n="hero_primary">开始了解</a>
+                    <a class="btn btn-ghost" href="#workflow" data-i18n="hero_secondary">查看流程</a>
+                </div>
+                <p class="hero-note" data-i18n="hero_note">Local-first. Productive. Reliable.</p>
+            </div>
+
+            <aside class="hero-panel reveal" aria-label="Preview">
+                <div class="panel-head">
+                    <span></span><span></span><span></span>
+                </div>
+                <pre class="panel-code"><code># tools_overview
+- params_manager
+- prompt_manager
+- token_counter
+- json_utility
+- diff_utility
+- llm_api_tester
+- calculator
+- timer</code></pre>
+            </aside>
+        </section>
+
+        <section id="features" class="features container">
+            <h2 class="section-title reveal" data-i18n="feature_title">功能模块</h2>
+            <div class="feature-grid">
+                <article class="feature-card reveal">
+                    <h3 data-i18n="feature_1_title">参数管理</h3>
+                    <p data-i18n="feature_1_desc">保存与编辑 SFT CLI 参数模板，支持版本记录与基础校验。</p>
+                </article>
+                <article class="feature-card reveal">
+                    <h3 data-i18n="feature_2_title">Prompt 管理</h3>
+                    <p data-i18n="feature_2_desc">按目录分类维护 Prompt，支持 CRUD 与历史版本管理。</p>
+                </article>
+                <article class="feature-card reveal">
+                    <h3 data-i18n="feature_3_title">Token 统计</h3>
+                    <p data-i18n="feature_3_desc">支持 gpt、qwen、llama 三类模型的 Token 计数。</p>
+                </article>
+                <article class="feature-card reveal">
+                    <h3 data-i18n="feature_4_title">JSON 工具</h3>
+                    <p data-i18n="feature_4_desc">提供解析、格式化、压缩、转义/反转义与错误提示。</p>
+                </article>
+                <article class="feature-card reveal">
+                    <h3 data-i18n="feature_5_title">Diff 工具</h3>
+                    <p data-i18n="feature_5_desc">支持行级/字符级文本对比，并可进行 JSON/Prompt 归一化比较。</p>
+                </article>
+                <article class="feature-card reveal">
+                    <h3 data-i18n="feature_6_title">LLM API 测试</h3>
+                    <p data-i18n="feature_6_desc">支持 OpenAI 兼容接口请求与流式响应解析。</p>
+                </article>
+                <article class="feature-card reveal">
+                    <h3 data-i18n="feature_7_title">Calculator</h3>
+                    <p data-i18n="feature_7_desc">支持表达式计算、变量管理与历史记录。</p>
+                </article>
+                <article class="feature-card reveal">
+                    <h3 data-i18n="feature_8_title">Timer</h3>
+                    <p data-i18n="feature_8_desc">支持分段计时与历史会话记录。</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="workflow" class="workflow container reveal">
+            <h2 class="section-title" data-i18n="workflow_title">典型使用流程</h2>
+            <ol class="workflow-list">
+                <li data-i18n="workflow_1">配置并保存 SFT 参数模板</li>
+                <li data-i18n="workflow_2">管理 Prompt 并完成版本迭代</li>
+                <li data-i18n="workflow_3">统计 Token，处理 JSON/Diff，并辅助计算与计时</li>
+                <li data-i18n="workflow_4">使用 LLM API 测试验证请求与响应</li>
+            </ol>
+        </section>
+    </main>
+
+    <footer id="about" class="site-footer container reveal">
+        <p data-i18n="footer_text">SFTLab · Build once, scale globally.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
