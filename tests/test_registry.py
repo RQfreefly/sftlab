@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest
 
 from app.main import build_registry
-from app.storage import Database, SftParamTemplateRepository
+from app.storage import Database, PromptRepository, SftParamTemplateRepository
 from app.tools.sample_tool import SampleTool
 from app.tools.registry import ToolRegistry
 
@@ -58,3 +58,18 @@ def test_build_registry_contains_sft_tool_when_repo_provided(tmp_path) -> None:
     # Then: 包含参数管理工具
     assert "sample_tool" in tool_ids
     assert "sft_params" in tool_ids
+
+
+def test_build_registry_contains_prompt_tool_when_repo_provided(tmp_path) -> None:
+    # Given: 可用的 Prompt 仓储
+    database = Database(tmp_path / "sftlab.db")
+    database.initialize()
+    repo = PromptRepository(database)
+
+    # When: 使用仓储构建注册表
+    registry = build_registry(prompt_repo=repo)
+    tool_ids = [tool.metadata.tool_id for tool in registry.all()]
+
+    # Then: 包含 Prompt 管理工具
+    assert "sample_tool" in tool_ids
+    assert "prompt_manager" in tool_ids
