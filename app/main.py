@@ -14,12 +14,15 @@ from app.storage import (
     Database,
     PromptRepository,
     SftParamTemplateRepository,
+    TimerRepository,
 )
+from app.tools.cli_calculator import CliCalculatorTool
 from app.tools.diff_tool import DiffTool
 from app.tools.json_tool import JsonTool
 from app.tools.prompt_manager import PromptManagerTool
 from app.tools.registry import ToolRegistry
 from app.tools.sample_tool import SampleTool
+from app.tools.segment_timer import SegmentTimerTool
 from app.tools.sft_params import SftParamTool
 from app.tools.token_counter import TokenCounterTool
 from app.ui.main_window import MainWindow
@@ -30,6 +33,7 @@ LOGGER = get_logger(__name__)
 def build_registry(
     sft_param_repo: SftParamTemplateRepository | None = None,
     prompt_repo: PromptRepository | None = None,
+    timer_repo: TimerRepository | None = None,
 ) -> ToolRegistry:
     """构建默认工具注册表。"""
     registry = ToolRegistry()
@@ -37,6 +41,9 @@ def build_registry(
     registry.register(TokenCounterTool())
     registry.register(JsonTool())
     registry.register(DiffTool())
+    registry.register(CliCalculatorTool())
+    if timer_repo is not None:
+        registry.register(SegmentTimerTool(timer_repo))
     if sft_param_repo is not None:
         registry.register(SftParamTool(sft_param_repo))
     if prompt_repo is not None:
@@ -54,12 +61,14 @@ def run() -> int:
     config_repo = ConfigRepository(database)
     sft_param_repo = SftParamTemplateRepository(database)
     prompt_repo = PromptRepository(database)
+    timer_repo = TimerRepository(database)
 
     app = QApplication(sys.argv)
     window = MainWindow(
         build_registry(
             sft_param_repo=sft_param_repo,
             prompt_repo=prompt_repo,
+            timer_repo=timer_repo,
         ),
         config_repo=config_repo,
     )

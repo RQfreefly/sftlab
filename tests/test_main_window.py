@@ -10,7 +10,13 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 from PySide6.QtWidgets import QApplication
 
 from app.main import build_registry
-from app.storage import ConfigRepository, Database, PromptRepository, SftParamTemplateRepository
+from app.storage import (
+    ConfigRepository,
+    Database,
+    PromptRepository,
+    SftParamTemplateRepository,
+    TimerRepository,
+)
 from app.ui.main_window import MainWindow
 
 
@@ -22,8 +28,13 @@ def test_main_window_loads_tools(tmp_path) -> None:
     config_repo = ConfigRepository(database)
     sft_repo = SftParamTemplateRepository(database)
     prompt_repo = PromptRepository(database)
+    timer_repo = TimerRepository(database)
     window = MainWindow(
-        build_registry(sft_param_repo=sft_repo, prompt_repo=prompt_repo),
+        build_registry(
+            sft_param_repo=sft_repo,
+            prompt_repo=prompt_repo,
+            timer_repo=timer_repo,
+        ),
         config_repo=config_repo,
     )
 
@@ -33,7 +44,7 @@ def test_main_window_loads_tools(tmp_path) -> None:
 
     # Then: 侧边栏与工作区数量一致，且至少有 1 个工具
     assert sidebar_count == workspace_count
-    assert sidebar_count >= 6
+    assert sidebar_count >= 8
 
     window.close()
     app.quit()
@@ -47,10 +58,15 @@ def test_main_window_persists_ui_state_on_close(tmp_path) -> None:
     config_repo = ConfigRepository(database)
     sft_repo = SftParamTemplateRepository(database)
     prompt_repo = PromptRepository(database)
+    timer_repo = TimerRepository(database)
 
     # When: 调整窗口尺寸并关闭
     window = MainWindow(
-        build_registry(sft_param_repo=sft_repo, prompt_repo=prompt_repo),
+        build_registry(
+            sft_param_repo=sft_repo,
+            prompt_repo=prompt_repo,
+            timer_repo=timer_repo,
+        ),
         config_repo=config_repo,
     )
     tool_ids = [

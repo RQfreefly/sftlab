@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest
 
 from app.main import build_registry
-from app.storage import Database, PromptRepository, SftParamTemplateRepository
+from app.storage import Database, PromptRepository, SftParamTemplateRepository, TimerRepository
 from app.tools.sample_tool import SampleTool
 from app.tools.registry import ToolRegistry
 
@@ -41,12 +41,13 @@ def test_build_registry_contains_sample_tool() -> None:
     tools = list(registry.all())
     tool_ids = [tool.metadata.tool_id for tool in tools]
 
-    # Then: 默认包含示例、Token、JSON、Diff 工具
-    assert len(tools) == 4
+    # Then: 默认包含示例、Token、JSON、Diff、Calculator 工具
+    assert len(tools) == 5
     assert "sample_tool" in tool_ids
     assert "token_counter" in tool_ids
     assert "json_tool" in tool_ids
     assert "diff_tool" in tool_ids
+    assert "cli_calculator" in tool_ids
 
 
 def test_build_registry_contains_sft_tool_when_repo_provided(tmp_path) -> None:
@@ -64,6 +65,7 @@ def test_build_registry_contains_sft_tool_when_repo_provided(tmp_path) -> None:
     assert "token_counter" in tool_ids
     assert "json_tool" in tool_ids
     assert "diff_tool" in tool_ids
+    assert "cli_calculator" in tool_ids
     assert "sft_params" in tool_ids
 
 
@@ -82,4 +84,19 @@ def test_build_registry_contains_prompt_tool_when_repo_provided(tmp_path) -> Non
     assert "token_counter" in tool_ids
     assert "json_tool" in tool_ids
     assert "diff_tool" in tool_ids
+    assert "cli_calculator" in tool_ids
     assert "prompt_manager" in tool_ids
+
+
+def test_build_registry_contains_timer_tool_when_repo_provided(tmp_path) -> None:
+    # Given: 可用的计时仓储
+    database = Database(tmp_path / "sftlab.db")
+    database.initialize()
+    repo = TimerRepository(database)
+
+    # When: 使用仓储构建注册表
+    registry = build_registry(timer_repo=repo)
+    tool_ids = [tool.metadata.tool_id for tool in registry.all()]
+
+    # Then: 包含计时工具
+    assert "segment_timer" in tool_ids
