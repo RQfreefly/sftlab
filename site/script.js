@@ -1,7 +1,7 @@
 const i18n = {
     zh: {
         page_title: "SFTLab | SFT/LLM 本地工具集",
-        toggle: "EN",
+        toggle: "中文 / EN",
         aria_label: "切换到英文",
         nav_features: "功能",
         nav_workflow: "流程",
@@ -38,7 +38,7 @@ const i18n = {
     },
     en: {
         page_title: "SFTLab | SFT/LLM Desktop Toolkit",
-        toggle: "中文",
+        toggle: "中文 / EN",
         aria_label: "Switch to Chinese",
         nav_features: "Features",
         nav_workflow: "Workflow",

@@ -30,7 +30,7 @@ class MainWindow(QMainWindow):
         self._config_repo = config_repo
         self._tool_order: list[ToolPlugin] = []
 
-        self.setWindowTitle("SFT 工具集")
+        self.setWindowTitle("sftlab")
         self._load_ui_state()
 
         self.sidebar = QListWidget(self)

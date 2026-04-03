@@ -130,6 +130,29 @@ body::before {
     box-shadow: 0 0 0 2px rgba(66, 211, 146, 0.15);
 }
 
+.header-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+
+.github-link {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--text);
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.86rem;
+    padding: 0.42rem 0.82rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.github-link:hover {
+    border-color: rgba(96, 165, 250, 0.7);
+    box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.18);
+}
+
 .hero {
     display: grid;
     grid-template-columns: 1.05fr 0.95fr;
@@ -247,13 +270,18 @@ body::before {
     background: #34d399;
 }
 
-.panel-code {
+.panel-figure {
     margin: 0;
-    padding: 1rem;
-    overflow-x: auto;
-    color: #d8e4ff;
-    font-size: 0.9rem;
-    line-height: 1.55;
+    padding: 0.8rem;
+}
+
+.panel-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    box-shadow: 0 10px 22px rgba(8, 15, 36, 0.35);
 }
 
 .features {
